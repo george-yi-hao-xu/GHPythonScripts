@@ -35,18 +35,16 @@ These stubs do not provide the real Rhino runtime. Rhino and Grasshopper provide
 
 Grasshopper component inputs are injected into the script as global variables at runtime. Pylance cannot see those injected names when it analyzes the file in VS Code, so a plain input such as `points` or `curve` may be reported as undefined or unbound.
 
-Use `typing.cast` with `globals()` to bind the injected value while giving Pylance a useful type:
+Use `globals()` with type comments to bind the injected value while giving Pylance a useful type:
 
 ```python
-from typing import cast
-
 import Rhino.Geometry as rg
 
-points = cast(list[rg.Point3d], globals()["points"])
-curve = cast(rg.Curve, globals()["curve"])
+points = globals()["points"]  # type: list[rg.Point3d]
+curve = globals()["curve"]  # type: rg.Curve
 ```
 
-`globals()["points"]` retrieves the value that Grasshopper injected into the script namespace. `cast(...)` only tells the type checker what type to assume; it does not convert or validate the value at runtime.
+`globals()["points"]` retrieves the value that Grasshopper injected into the script namespace. The `# type: ...` comments are read by Pylance, but ignored by Grasshopper at runtime.
 
 If the script is run outside Grasshopper, this pattern will raise a `KeyError` unless those globals are provided another way.
 
