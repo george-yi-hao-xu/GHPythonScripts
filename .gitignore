@@ -1,0 +1,32 @@
+# Python cache and build output
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Grasshopper / Rhino autosaves and backups
+*.gh~
+*.ghx~
+*.3dm.bak
+*.bak
+*.tmp
