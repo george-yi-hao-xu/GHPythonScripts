@@ -11,12 +11,10 @@ Outputs:
 """
 
 import Rhino.Geometry as rg
-from typing import cast
 
 # Grasshopper supplies these names from the component inputs at runtime.
-# This `cast` is just to satisfy the type checker and has no effect at runtime.
-points = cast(list[rg.Point3d], globals()["points"])
-curve = cast(rg.Curve, globals()["curve"])
+points = globals()["points"]  # type: list[rg.Point3d]
+curve = globals()["curve"]  # type: rg.Curve
 
 
 inside_pts = []
