@@ -1,6 +1,7 @@
 import Rhino.Geometry as rg
 
 
+# Normalize accepted Grasshopper geometry inputs into one planar Brep.
 def coerce_planar_brep(geometry, tolerance):
     if isinstance(geometry, rg.Brep):
         brep = geometry.DuplicateBrep()
@@ -51,6 +52,8 @@ def normalized_point(curve, value):
     return curve.PointAt(parameter)
 
 
+# Return the outer boundary edge curves with loop order and length, so the
+# crack logic can find long sides to connect with a splitting line.
 def outer_boundary_segments(brep):
     face = brep.Faces[0]
     outer_loop = None
@@ -84,4 +87,3 @@ def outer_boundary_segments(brep):
         })
 
     return segments
-
