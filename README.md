@@ -49,3 +49,69 @@ curve = globals()["curve"]  # type: rg.Curve
 If the script is run outside Grasshopper, this pattern will raise a `KeyError` unless those globals are provided another way.
 
 Keep `requirements.txt` for actual pip packages needed at runtime.
+
+## Bundling multi-file GHPython scripts
+
+Some Grasshopper components are easier to develop as several small Python files,
+but still need one single `.py` file for the component.
+
+Use this folder convention:
+
+```text
+src/component_name/source/
+```
+
+The bundler discovers every folder with that shape. It sorts local modules from
+their relative imports, keeps `header.py` first when present, and emits
+`component.py` last when possible.
+
+For example, the editable source for `ice_crack` lives in:
+
+```text
+src/ice_crack/source/
+```
+
+After editing those source files, rebuild that single Grasshopper script:
+
+```powershell
+python tools/bundle_ghpython.py ice_crack
+```
+
+This regenerates:
+
+```text
+src/ice_crack/ice_crack.py
+```
+
+To see all discovered components:
+
+```powershell
+python tools/bundle_ghpython.py --list
+```
+
+To rebuild every discovered component:
+
+```powershell
+python tools/bundle_ghpython.py
+```
+
+## Component config strings
+
+Some components can read settings from one multiline Grasshopper text input
+instead of many separate sliders or panels.
+
+For `ice_crack`, add a text input named `config` or `config_text` with:
+
+```text
+min_area=1.0
+max_depth=8
+seed=1
+crack_variation=0.25
+tol=None
+```
+
+The same text can also live in a `.txt` file, passed through an input named
+`config_path`.
+
+If both config text and individual inputs are present, the individual inputs
+win when they are filled in.
